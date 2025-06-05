@@ -13,22 +13,14 @@ namespace GTFOMedalsMod.Data;
 internal class SavedMedals
 {
 
-    private Dictionary<string, Time> medalsObtained;
-
-    /// <summary>
-    /// default constructor, empty dictionary
-    /// </summary>
-    public SavedMedals()
-    {
-        this.medalsObtained = new Dictionary<string, Time>();
-    }
+    private static Dictionary<string, Time> medalsObtained = new Dictionary<string, Time>();
 
     /// <summary>
     /// Add a single run to the stored runs. Automatically saves the best time
     /// </summary>
     /// <param name="level"> name of level </param>
     /// <param name="time"> time in which the level was completed </param>
-    public void AddRun(string level, Time time)
+    public static void AddRun(string level, Time time)
     {
         Time? last_time = medalsObtained[level];
 
@@ -45,9 +37,9 @@ internal class SavedMedals
     /// </summary>
     /// <param name="level"> level for which you want to see medal </param>
     /// <returns> medal or null if no medal is obtained on this level </returns>
-    public Medal? GetMedal(string level) {
+    public static Medal? GetMedal(string level) {
         MedalTimes? times = MedalRegistry.AllMedals[level];
-        Time? bestTime = this.medalsObtained[level];
+        Time? bestTime = medalsObtained[level];
 
         if (times != null && bestTime != null) {
             return times.GetMedal(bestTime);
