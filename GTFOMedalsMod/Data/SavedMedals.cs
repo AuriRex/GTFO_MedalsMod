@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GTFOMedalsMod.Data;
@@ -14,6 +15,12 @@ internal class SavedMedals
 {
 
     private static Dictionary<string, Time> medalsObtained = new Dictionary<string, Time>();
+
+    private static readonly string SavePath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        "GTFOMedalsMod",
+        "medals.json"
+    );
 
     /// <summary>
     /// Add a single run to the stored runs. Automatically saves the best time
@@ -46,6 +53,39 @@ internal class SavedMedals
         }
 
         return null;
+    }
+
+    public static void Load()
+    {
+        if (!File.Exists(SavePath))
+        {
+            medalsObtained = new();
+            return;
+        }
+
+        try
+        {
+            string json = File.ReadAllText(SavePath);
+            medalsObtained = JsonSerializer.Deserialize<Dictionary<string, Time>>(json) ?? new();
+        }
+        catch (Exception)
+        {
+            medalsObtained = new();
+        }
+    }
+
+    public static void Save()
+    {
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(SavePath)!);
+            string json = JsonSerializer.Serialize(medalsObtained);
+            File.WriteAllText(SavePath, json);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
 }
