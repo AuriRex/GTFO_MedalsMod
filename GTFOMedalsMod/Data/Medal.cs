@@ -17,7 +17,12 @@ internal class MedalTimes
     readonly public Time? goldTime;
     readonly public Time? championTime;
 
-    // "2:35 5:10 10:20 20:0"
+    /// <summary>
+    /// Construct the medal times from a string that looks like this:
+    /// "2:35 5:10 10:20 20:0"
+    /// First medal is champion and so on...
+    /// </summary>
+    /// <param name="data"></param>
     internal MedalTimes(string data)
     {
         string[] parts = data.Split(' ');

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,16 @@ internal class Time
 
     public bool CheckValidMedal(Time other) {
         return this.stamp < other.stamp + 1000;
+    }
+
+    public static bool operator <(Time left, Time right)
+    {
+        return left.stamp < right.stamp;
+    }
+
+    public static bool operator >(Time left, Time right)
+    {
+        return left.stamp > right.stamp;
     }
 
 }
