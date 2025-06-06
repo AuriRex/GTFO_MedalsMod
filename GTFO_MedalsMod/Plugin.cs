@@ -12,6 +12,7 @@ using MedalsMod;
 namespace MedalsMod;
 
 [BepInPlugin(GUID, MOD_NAME, VERSION)]
+[BepInDependency("dev.gtfomodding.gtfo-api")]
 public class Plugin : BasePlugin
 {
     public const string GUID = "dev.Tgb03.gtfo.GTFO_MedalsMod";
