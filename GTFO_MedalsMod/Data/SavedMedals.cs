@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace GTFOMedalsMod.Data;
+namespace MedalsMod.Data;
 
 /// <summary>
 /// This is a class that can store the medals that 

@@ -29,6 +29,6 @@ public class Plugin : BasePlugin
 
         _harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-        L.LogInfo("Plugin loaded!");
+        L.LogInfo("GTFO_MedalsMod loaded!");
     }
 }
