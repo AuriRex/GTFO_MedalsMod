@@ -1,6 +1,7 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 
-namespace GTFOMedalsMod.Data;
+namespace MedalsMod.Data;
 
 internal enum Medal
 {

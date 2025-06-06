@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{AC50DA26-9689-4B75-B57C-51D38EACCB62}") = "GTFO_MedalsMod", "GTFO_MedalsMod\GTFO_MedalsMod.csproj", "{E2C98D5F-D5F2-4090-8F32-D924B54E742F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5B92992E-C6F4-4AD7-BCA6-4DBE2B1364BD}"
+	ProjectSection(SolutionItems) = preProject
+		GameFolder.props = GameFolder.props
+		Dependencies.props = Dependencies.props
+		README.md = README.md
+		CHANGELOG.md = CHANGELOG.md
+		icon.png = icon.png
+		ManifestInfo.props = ManifestInfo.props
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2C98D5F-D5F2-4090-8F32-D924B54E742F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2C98D5F-D5F2-4090-8F32-D924B54E742F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2C98D5F-D5F2-4090-8F32-D924B54E742F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2C98D5F-D5F2-4090-8F32-D924B54E742F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
