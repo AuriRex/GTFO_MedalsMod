@@ -16,6 +16,7 @@ This a mod to allow easy access to the Speedrunning Medals and to make grinding 
   - [ ] Non GTFO Related
     - [x] Medals class
     - [x] Time class
-    - [ ] Saving of runs completed
+    - [x] Saving of runs locally completed
+    - [ ] Saving on runs on a server
        
 - [ ] Medal times are set by Eva & gang 
