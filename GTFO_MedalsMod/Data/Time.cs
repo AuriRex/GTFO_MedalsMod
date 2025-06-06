@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace MedalsMod.Data;
 
 
 internal class Time
 {
-
-    UInt64 stamp;
+    [JsonInclude]
+    public UInt64 stamp;
 
     public Time(UInt64 stamp) {  this.stamp = stamp; }
     public Time(DateTime timestamp1, DateTime timestamp2) {

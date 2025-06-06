@@ -1,10 +1,10 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace MedalsMod.Data;
 
@@ -30,10 +30,12 @@ internal class SavedMedals
     /// <param name="time"> time in which the level was completed </param>
     public static void AddRun(string level, Time time)
     {
-        Time? last_time = medalsObtained[level];
-
-        if (last_time != null && last_time < time) {
-            medalsObtained.Add(level, last_time);
+        if (medalsObtained.TryGetValue(level, out Time? last_time)) {
+            if (time < last_time)
+            {
+                medalsObtained.Add(level, time);
+            }
+        
         } else
         {
             medalsObtained.Add(level, time);
@@ -46,14 +48,20 @@ internal class SavedMedals
     /// <param name="level"> level for which you want to see medal </param>
     /// <returns> medal or null if no medal is obtained on this level </returns>
     public static Medal? GetMedal(string level) {
-        MedalTimes? times = MedalRegistry.AllMedals[level];
-        Time? bestTime = medalsObtained[level];
+        try {
+            MedalTimes? times = MedalRegistry.AllMedals[level];
+            Time? bestTime = medalsObtained[level];
 
-        if (times != null && bestTime != null) {
-            return times.GetMedal(bestTime);
+            if (times != null && bestTime != null)
+            {
+                return times.GetMedal(bestTime);
+            }
+
+            return null;
+        } catch
+        {
+            return null;
         }
-
-        return null;
     }
 
     public static void Load()

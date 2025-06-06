@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../ManifestInfo.props"/>
+    <Import Project="../ManifestInfo.props" />
 
-    <Import Project="../BuildHelper.props"/>
+    <Import Project="../BuildHelper.props" />
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>

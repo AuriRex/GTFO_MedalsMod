@@ -13,6 +13,7 @@ internal enum Medal
 
 internal class MedalTimes
 {
+#nullable enable
     readonly public Time? bronzeTime;
     readonly public Time? silverTime;
     readonly public Time? goldTime;
