@@ -13,6 +13,7 @@ internal class TimeCollector
 {
 
     static private DateTime? stamp = null;
+    static private bool checkpoint = false;
 
     public static void Start()
     {
@@ -21,7 +22,10 @@ internal class TimeCollector
 
     public static Time? FinishRun()
     {
-        if (stamp == null) { return null; }
+        if (stamp == null || checkpoint == true) {
+            checkpoint = false;
+            return null; 
+        }
 
         Time time = new((DateTime)stamp, DateTime.UtcNow);
         stamp = null;
@@ -31,5 +35,10 @@ internal class TimeCollector
     public static void SetInvalid()
     {
         stamp = null;
+    }
+
+    public static void SetCheckpoint(bool checkpoint_value)
+    {
+        checkpoint = checkpoint_value;
     }
 }

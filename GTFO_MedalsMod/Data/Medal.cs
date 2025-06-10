@@ -11,6 +11,28 @@ internal enum Medal
     Champion,
 }
 
+internal class MedalColors
+{
+    public static string GetMedalColor(Medal? medal)
+    {
+        switch (medal)
+        {
+            case Medal.Bronze:
+                return "#cd7f32";
+            case Medal.Silver:
+                return "#c0c0c0";
+            case Medal.Gold:
+                return "#ffd700";
+            case Medal.Champion:
+                return "#FF2EFF";
+            case null:
+                return "#ffffff";
+        }
+
+        return "#ffffff";
+    }
+}
+
 internal class MedalTimes
 {
 #nullable enable
@@ -34,7 +56,8 @@ internal class MedalTimes
         for (int i = 0; i < parts.Length; i++) {
             try {
                 times[i] = ParseTime(parts[i]);
-            } catch {
+            } catch
+            {
                 times[i] = null;
             };
         }
@@ -47,10 +70,11 @@ internal class MedalTimes
 
     public Medal? GetMedal(Time time)
     {
-        if (this.championTime != null && this.championTime.CheckValidMedal(time)) { return Medal.Champion; }
-        if (this.goldTime != null && this.goldTime.CheckValidMedal(time)) { return Medal.Gold; }
-        if (this.silverTime != null && this.silverTime.CheckValidMedal(time)) { return Medal.Silver; }
-        if (this.bronzeTime != null && this.bronzeTime.CheckValidMedal(time)) { return Medal.Bronze; }
+
+        if (this.championTime != null && time.CheckValidMedal(championTime)) { return Medal.Champion; }
+        if (this.goldTime != null && time.CheckValidMedal(goldTime)) { return Medal.Gold; }
+        if (this.silverTime != null && time.CheckValidMedal(silverTime)) { return Medal.Silver; }
+        if (this.bronzeTime != null && time.CheckValidMedal(bronzeTime)) { return Medal.Bronze; }
 
         return null;
     }
@@ -58,13 +82,20 @@ internal class MedalTimes
     private Time ParseTime(string timeStr)
     {
         string[] tokens = timeStr.Split(':');
-        if (tokens.Length != 2)
-            throw new FormatException($"Invalid time format: {timeStr}");
 
-        if (!UInt64.TryParse(tokens[0], out UInt64 minutes) || !UInt64.TryParse(tokens[1], out UInt64 seconds))
-            throw new FormatException($"Invalid numbers in time: {timeStr}");
+        try
+        {
+            if (tokens.Length != 2)
+                throw new FormatException($"Invalid time format: {timeStr}");
 
-        return new Time(minutes, seconds);
+            if (!UInt64.TryParse(tokens[0], out UInt64 minutes) || !UInt64.TryParse(tokens[1], out UInt64 seconds))
+                throw new FormatException($"Invalid numbers in time: {timeStr}");
+
+            return new Time(minutes, seconds);
+        } catch (Exception)
+        {
+            throw;
+        }
     }
 }
 

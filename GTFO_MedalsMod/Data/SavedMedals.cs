@@ -49,8 +49,8 @@ internal class SavedMedals
     /// <returns> medal or null if no medal is obtained on this level </returns>
     public static Medal? GetMedal(string level) {
         try {
-            MedalTimes? times = MedalRegistry.AllMedals[level];
             Time? bestTime = medalsObtained[level];
+            MedalTimes? times = MedalRegistry.AllMedals[level];
 
             if (times != null && bestTime != null)
             {
@@ -58,6 +58,17 @@ internal class SavedMedals
             }
 
             return null;
+        } catch
+        {
+            return null;
+        }
+    }
+
+    public static Time? GetTime(string level)
+    {
+        try
+        {
+            return medalsObtained[level];
         } catch
         {
             return null;
@@ -77,8 +88,9 @@ internal class SavedMedals
             string json = File.ReadAllText(SavePath);
             medalsObtained = JsonSerializer.Deserialize<Dictionary<string, Time>>(json) ?? new();
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Plugin.L.LogError(e);
             medalsObtained = new();
         }
     }

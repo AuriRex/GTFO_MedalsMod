@@ -5,6 +5,7 @@ using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using MedalsMod;
 using MedalsMod.Data;
+using MedalsMod.GameObj;
 using MedalsMod.Patches;
 
 [assembly: AssemblyVersion(Plugin.VERSION)]
@@ -30,8 +31,6 @@ public class Plugin : BasePlugin
         L = Log;
 
         _harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-        _harmony.PatchAll(typeof(UIPatch));
 
         SavedMedals.Load();
 

@@ -1,9 +1,12 @@
 ﻿#nullable enable
 
+using Discord;
+using Expedition;
 using GameData;
 using GameEvent;
 using HarmonyLib;
 using MedalsMod.Data;
+using MedalsMod.GameObj;
 using Player;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -14,7 +17,6 @@ namespace MedalsMod.Patches;
 [HarmonyPatch]
 internal class GameStatePatch
 {
-
     [HarmonyPatch(typeof(GameEventManager), nameof(GameEventManager.PostEvent),
         [
             typeof(eGameEvent),
@@ -33,6 +35,9 @@ internal class GameStatePatch
 
         switch (e)
         {
+            case eGameEvent.gs_Startup:
+                LevelSelectText.Initialize();
+                break;
             case eGameEvent.gs_InLevel:
                 OnRunStart();
                 break;
@@ -40,12 +45,15 @@ internal class GameStatePatch
             case eGameEvent.gs_ExpeditionAbort:
             case eGameEvent.game_quit:
                 TimeCollector.SetInvalid();
+                TimeCollector.SetCheckpoint(false);
                 break;
             // case eGameEvent.player_chat_message_sent:
             case eGameEvent.gs_ExpeditionSuccess:
                 OnRunFinish();
+                TimeCollector.SetCheckpoint(false);
                 break;
             case eGameEvent.checkpoint_reload:
+                TimeCollector.SetCheckpoint(true);
                 TimeCollector.SetInvalid();
                 break;
             default:
