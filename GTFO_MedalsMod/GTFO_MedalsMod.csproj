@@ -23,4 +23,8 @@
     <PropertyGroup Condition="$(TargetFramework.StartsWith('Framework_Her'))">
         <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\" />
+    </ItemGroup>
 </Project>

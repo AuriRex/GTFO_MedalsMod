@@ -33,6 +33,7 @@ public class Plugin : BasePlugin
         _harmony.PatchAll(Assembly.GetExecutingAssembly());
 
         SavedMedals.Load();
+        MedalImages.Load();
 
         L.LogInfo("GTFO_MedalsMod loaded!");
     }
