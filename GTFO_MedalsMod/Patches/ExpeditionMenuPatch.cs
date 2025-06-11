@@ -36,7 +36,7 @@ internal class ExpeditionMenuPatch
         string levelName = descriptive.Prefix +
             (!descriptive.SkipExpNumberInName ? exp_index.ToString() : "");
 
-        LevelSelectText.UpdateMedalText(levelName);
+        MedalInfo.UpdateMedals(levelName);
     }
 }
 
@@ -47,15 +47,24 @@ internal static class Inject_CM_Expedition
 
     private static void Postfix(CM_PageExpeditionSuccess __instance)
     {
-        Time? time = TimeCollector.GetLastTime();
-        string? exp = TimeCollector.GetLastLevel();
+        var time = TimeCollector.GetLastTime();
+        var exp = TimeCollector.GetLastLevel();
+        
+        if (exp == null || !MedalRegistry.AllMedals.TryGetValue(exp, out var medalTimes))
+        {
+            return;
+        }
+        
+        var medal = medalTimes.GetMedal(time);
 
-        var medal = MedalRegistry.AllMedals[exp].GetMedal(time);
-
-        if (medal == null) { return; }
+        if (medal == null)
+        {
+            return;
+        }
 
         try {
 
+            // TODO lol
             // add medal here somehow????
             // code info: 
             //

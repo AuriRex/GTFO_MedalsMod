@@ -3,10 +3,10 @@ using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
+using Il2CppInterop.Runtime.Injection;
 using MedalsMod;
 using MedalsMod.Data;
 using MedalsMod.GameObj;
-using MedalsMod.Patches;
 
 [assembly: AssemblyVersion(Plugin.VERSION)]
 [assembly: AssemblyFileVersion(Plugin.VERSION)]
@@ -35,6 +35,8 @@ public class Plugin : BasePlugin
         SavedMedals.Load();
         MedalImages.Load();
 
+        ClassInjector.RegisterTypeInIl2Cpp<MedalInfo>();
+        
         L.LogInfo("GTFO_MedalsMod loaded!");
     }
 }

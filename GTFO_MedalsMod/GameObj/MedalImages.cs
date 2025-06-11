@@ -22,9 +22,9 @@ internal class MedalImages
         string FOLDER_PATH = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
         championMedal = LoadSingle(FOLDER_PATH + "/Resources/Champion.png");
-        championMedal = LoadSingle(FOLDER_PATH + "/Resources/Gold.png");
-        championMedal = LoadSingle(FOLDER_PATH + "/Resources/Silver.png");
-        championMedal = LoadSingle(FOLDER_PATH + "/Resources/Bronze.png");
+        goldMedal = LoadSingle(FOLDER_PATH + "/Resources/Gold.png");
+        silverMedal = LoadSingle(FOLDER_PATH + "/Resources/Silver.png");
+        bronzeMedal = LoadSingle(FOLDER_PATH + "/Resources/Bronze.png");
     }
 
 
@@ -52,19 +52,14 @@ internal class MedalImages
 
     public static Sprite GetSpriteFromMedal(Medal medal)
     {
-        switch (medal)
+        return medal switch
         {
-            case Medal.Bronze:
-                return bronzeMedal;
-            case Medal.Silver:
-                return silverMedal;
-            case Medal.Gold:
-                return goldMedal;
-            case Medal.Champion:
-                return championMedal;
-        }
-
-        return bronzeMedal;
+            Medal.Bronze => bronzeMedal,
+            Medal.Silver => silverMedal,
+            Medal.Gold => goldMedal,
+            Medal.Champion => championMedal,
+            _ => bronzeMedal
+        };
     }
 
 }

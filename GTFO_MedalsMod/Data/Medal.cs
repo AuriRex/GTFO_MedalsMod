@@ -121,6 +121,18 @@ internal class MedalTimes
             throw;
         }
     }
+
+    public Time? GetTime(Medal medal)
+    {
+        return medal switch
+        {
+            Medal.Bronze => bronzeTime,
+            Medal.Silver => silverTime,
+            Medal.Gold => goldTime,
+            Medal.Champion => championTime,
+            _ => bronzeTime,
+        };
+    }
 }
 
 internal static class MedalRegistry

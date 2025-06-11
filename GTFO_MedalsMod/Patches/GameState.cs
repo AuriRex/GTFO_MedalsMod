@@ -37,7 +37,7 @@ internal class GameStatePatch
         switch (e)
         {
             case eGameEvent.gs_Startup:
-                LevelSelectText.Initialize();
+                MedalInfo.Initialize();
                 break;
             case eGameEvent.gs_InLevel:
                 OnRunStart();

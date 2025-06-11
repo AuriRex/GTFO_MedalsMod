@@ -35,6 +35,11 @@ internal class Time
         return minutes.ToString("D2") + ":" + seconds.ToString("D2");
     }
 
+    public override string ToString()
+    {
+        return GetString();
+    }
+
     public bool CheckValidMedal(Time other) {
         return this.stamp < other.stamp + 1000;
     }
