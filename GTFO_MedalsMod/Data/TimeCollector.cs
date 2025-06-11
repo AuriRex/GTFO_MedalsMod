@@ -11,6 +11,8 @@ namespace MedalsMod.Data;
 
 internal class TimeCollector
 {
+    static private Time? lastTime = null;
+    static private string? lastLevel = null;
 
     static private DateTime? stamp = null;
     static private bool checkpoint = false;
@@ -20,16 +22,17 @@ internal class TimeCollector
         stamp = DateTime.UtcNow;
     }
 
-    public static Time? FinishRun()
+    public static Time? FinishRun(string levelName)
     {
         if (stamp == null || checkpoint == true) {
             checkpoint = false;
             return null; 
         }
 
-        Time time = new((DateTime)stamp, DateTime.UtcNow);
+        lastLevel = levelName;
+        lastTime = new((DateTime)stamp, DateTime.UtcNow);
         stamp = null;
-        return time;
+        return lastTime;
     }
 
     public static void SetInvalid()
@@ -40,5 +43,15 @@ internal class TimeCollector
     public static void SetCheckpoint(bool checkpoint_value)
     {
         checkpoint = checkpoint_value;
+    }
+
+    public static Time? GetLastTime()
+    {
+        return lastTime;
+    }
+
+    public static string? GetLastLevel()
+    {
+        return lastLevel;
     }
 }
