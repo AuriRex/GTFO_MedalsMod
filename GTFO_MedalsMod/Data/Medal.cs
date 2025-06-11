@@ -33,6 +33,28 @@ internal class MedalColors
     }
 }
 
+internal class MedalNames
+{
+    public static string GetMedalName(Medal? medal)
+    {
+        switch (medal)
+        {
+            case Medal.Bronze:
+                return " BRONZE ";
+            case Medal.Silver:
+                return " SILVER ";
+            case Medal.Gold:
+                return "  GOLD  ";
+            case Medal.Champion:
+                return "CHAMPION";
+            case null:
+                return "NO MEDAL";
+        }
+
+        return "#ffffff";
+    }
+}
+
 internal class MedalTimes
 {
 #nullable enable
