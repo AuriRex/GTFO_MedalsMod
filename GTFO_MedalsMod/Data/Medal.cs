@@ -1,5 +1,7 @@
-﻿using System;
+﻿using GTFO.API.JSON;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace MedalsMod.Data;
 
@@ -123,9 +125,46 @@ internal class MedalTimes
 
 internal static class MedalRegistry
 {
-    internal static readonly Dictionary<string, MedalTimes> AllMedals = new()
+
+    internal static readonly Dictionary<string, MedalTimes> AllMedals = MedalDataLoader.LoadMedalTimesFromJson();
+}
+
+internal static class MedalDataLoader
+{
+    internal static Dictionary<string, MedalTimes> LoadMedalTimesFromJson()
     {
-        { "R1A1", new MedalTimes("03:00 03:30 05:10 10:00") },
-        { "R1C1", new MedalTimes("20:35 21:00 26:00 35:00") },
-    };
+        var result = new Dictionary<string, MedalTimes>();
+
+        string filePath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "/Resources/Medals.json";
+
+        if (!File.Exists(filePath))
+        {
+            UnityEngine.Debug.LogWarning($"Medal times JSON file not found: {filePath}");
+            return result;
+        }
+
+        try
+        {
+            string json = File.ReadAllText(filePath);
+            var rawDict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+            foreach (var kv in rawDict)
+            {
+                try
+                {
+                    result[kv.Key] = new MedalTimes(kv.Value);
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogError($"Invalid MedalTimes value for '{kv.Key}': {e.Message}");
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogError($"Failed to load or parse medals.json: {e.Message}");
+        }
+
+        return result;
+    }
 }
