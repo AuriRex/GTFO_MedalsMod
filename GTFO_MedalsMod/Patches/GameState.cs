@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using CellMenu;
 using Discord;
 using Expedition;
 using GameData;
@@ -60,6 +61,11 @@ internal class GameStatePatch
                 break;
         }
 
+        if (PlayerChatManager.InChatMode)
+        {
+            WardenObjectiveManager.ForceCompleteObjective(LevelGeneration.LG_LayerType.MainLayer);
+        }
+
     }
 
     private static void OnRunStart()
@@ -71,11 +77,11 @@ internal class GameStatePatch
 
     private static void OnRunFinish()
     {
-        Time? time = TimeCollector.FinishRun();
-        
+        string exp = GetLevelName();
+        Time? time = TimeCollector.FinishRun(exp);
+
         if (time != null)
         {
-            string exp = GetLevelName();
             Plugin.L.LogInfo("Finished level: " + exp);
             SavedMedals.AddRun(exp, time);
             SavedMedals.Save();
