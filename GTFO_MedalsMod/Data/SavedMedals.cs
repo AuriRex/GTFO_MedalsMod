@@ -33,7 +33,7 @@ internal class SavedMedals
         if (medalsObtained.TryGetValue(level, out Time? last_time)) {
             if (time < last_time)
             {
-                medalsObtained.Add(level, time);
+                medalsObtained[level] = time;
             }
         
         } else
