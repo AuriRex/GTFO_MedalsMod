@@ -1,21 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 using CellMenu;
 using GameData;
-using GameEvent;
-using GTFO.API;
 using HarmonyLib;
 using MedalsMod.Data;
 using MedalsMod.GameObj;
-using Player;
-using TMPro;
 using UnityEngine;
-using static Il2CppSystem.Globalization.CultureInfo;
-using Time = MedalsMod.Data.Time;
 
 namespace MedalsMod.Patches;
 
@@ -40,7 +29,25 @@ internal class ExpeditionMenuPatch
     }
 }
 
-[HarmonyPatch(typeof(CM_PageExpeditionSuccess), "OnEnable")]
+[HarmonyPatch(typeof(CM_PageLoadout), nameof(CM_PageLoadout.Setup))]
+internal static class CM_PageLoadout__Setup__Patch
+{
+    public static void Postfix(CM_PageLoadout __instance)
+    {
+        MedalInfo.Initialize();
+    }
+}
+
+[HarmonyPatch(typeof(CM_PageExpeditionSuccess), nameof(CM_PageExpeditionSuccess.Setup))]
+internal static class CM_PageExpeditionSuccess__Setup__Patch
+{
+    public static void Postfix(CM_PageExpeditionSuccess __instance)
+    {
+        MedalEndScreenDisplay.Setup(__instance);
+    }
+}
+
+[HarmonyPatch(typeof(CM_PageExpeditionSuccess), nameof(CM_PageExpeditionSuccess.OnEnable))]
 internal static class Inject_CM_Expedition
 {
     private static GameObject icon;

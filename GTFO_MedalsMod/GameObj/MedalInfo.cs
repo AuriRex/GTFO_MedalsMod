@@ -46,8 +46,6 @@ internal partial class MedalInfo : MonoBehaviour
 
             Plugin.L.LogInfo("Setting up lobby medal displays ...");
 
-            CreatePrefab();
-
             CoroutineManager.StartCoroutine(DelayedSetup().WrapToIl2Cpp());
 
             //
@@ -201,6 +199,11 @@ internal partial class MedalInfo : MonoBehaviour
         yield return null;
         yield return null;
 
+        CreatePrefab();
+        
+        yield return null;
+        yield return null;
+        
         try
         {
             _medalContainer = new GameObject("MedalContainer");

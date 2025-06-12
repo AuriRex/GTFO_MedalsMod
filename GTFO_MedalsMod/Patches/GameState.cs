@@ -1,19 +1,52 @@
 ﻿#nullable enable
 
-using CellMenu;
-using Discord;
-using Expedition;
-using GameData;
 using GameEvent;
 using HarmonyLib;
 using MedalsMod.Data;
-using MedalsMod.GameObj;
 using Player;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using Time = MedalsMod.Data.Time;
 
 namespace MedalsMod.Patches;
+
+#if DEBUG
+[HarmonyPatch(typeof(GS_InLevel), nameof(GS_InLevel.Update))]
+internal static class GS_InLevel__Update__Patch
+{
+    public static void Postfix()
+    {
+        var focusState = FocusStateManager.CurrentState;
+        var guiLayer = MainMenuGuiLayer.Current;
+
+        if (guiLayer.PageExpeditionSuccess.m_isActive && focusState == eFocusState.FPS)
+        {
+            // In case we press ESC instead of the combo :p
+            guiLayer.HidePage(eCM_MenuPage.CMP_EXPEDITION_SUCCESS);
+            guiLayer.ShowPage(guiLayer.m_currentPageEnum);
+        }
+        
+        if (!Input.GetKey(KeyCode.LeftShift) || !Input.GetKey(KeyCode.RightShift) || !Input.GetKeyDown(KeyCode.I))
+        {
+            return;
+        }
+
+        switch (focusState)
+        {
+            case eFocusState.FPS:
+                GameStatePatch.OnRunFinish();
+                FocusStateManager.ToggleMenu();
+                guiLayer.HidePage(guiLayer.m_currentPageEnum);
+                guiLayer.ShowPage(eCM_MenuPage.CMP_EXPEDITION_SUCCESS);
+                break;
+            case eFocusState.MainMenu:
+                FocusStateManager.ToggleMenu();
+                guiLayer.HidePage(eCM_MenuPage.CMP_EXPEDITION_SUCCESS);
+                guiLayer.ShowPage(guiLayer.m_currentPageEnum);
+                break;
+        }
+    }
+}
+#endif
 
 [HarmonyPatch]
 internal class GameStatePatch
@@ -36,9 +69,6 @@ internal class GameStatePatch
 
         switch (e)
         {
-            case eGameEvent.gs_Startup:
-                MedalInfo.Initialize();
-                break;
             case eGameEvent.gs_InLevel:
                 OnRunStart();
                 break;
@@ -60,12 +90,6 @@ internal class GameStatePatch
             default:
                 break;
         }
-
-        if (PlayerChatManager.InChatMode)
-        {
-            WardenObjectiveManager.ForceCompleteObjective(LevelGeneration.LG_LayerType.MainLayer);
-        }
-
     }
 
     private static void OnRunStart()
@@ -75,17 +99,17 @@ internal class GameStatePatch
         Plugin.L.LogInfo("Started level: " + GetLevelName());
     }
 
-    private static void OnRunFinish()
+    internal static void OnRunFinish()
     {
-        string exp = GetLevelName();
-        Time? time = TimeCollector.FinishRun(exp);
+        var exp = GetLevelName();
+        var time = TimeCollector.FinishRun(exp);
 
-        if (time != null)
-        {
-            Plugin.L.LogInfo("Finished level: " + exp);
-            SavedMedals.AddRun(exp, time);
-            SavedMedals.Save();
-        }
+        if (time == null)
+            return;
+        
+        Plugin.L.LogInfo("Finished level: " + exp);
+        SavedMedals.AddRun(exp, time);
+        SavedMedals.Save();
     }
 
     private static string GetLevelName()

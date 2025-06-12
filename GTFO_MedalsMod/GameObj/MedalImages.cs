@@ -1,47 +1,57 @@
 ﻿using MedalsMod.Data;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace MedalsMod.GameObj;
 
-internal class MedalImages
+internal static class MedalImages
 {
-
-    public static Sprite championMedal;
-    public static Sprite goldMedal;
-    public static Sprite silverMedal;
-    public static Sprite bronzeMedal;
+    private static Sprite _championMedal;
+    private static Sprite _goldMedal;
+    private static Sprite _silverMedal;
+    private static Sprite _bronzeMedal;
 
     public static void Load()
     {
-        string FOLDER_PATH = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        var assemblyLocation = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-        championMedal = LoadSingle(FOLDER_PATH + "/Resources/Champion.png");
-        goldMedal = LoadSingle(FOLDER_PATH + "/Resources/Gold.png");
-        silverMedal = LoadSingle(FOLDER_PATH + "/Resources/Silver.png");
-        bronzeMedal = LoadSingle(FOLDER_PATH + "/Resources/Bronze.png");
+        _championMedal = LoadSingle(assemblyLocation + "/Resources/Champion.png");
+        _goldMedal = LoadSingle(assemblyLocation + "/Resources/Gold.png");
+        _silverMedal = LoadSingle(assemblyLocation + "/Resources/Silver.png");
+        _bronzeMedal = LoadSingle(assemblyLocation + "/Resources/Bronze.png");
     }
 
 
-    private static Sprite? LoadSingle(string path)
+    private static Sprite LoadSingle(string path)
     {
+        if (!File.Exists(path))
+        {
+            Plugin.L.LogError($"Medal image file not found: {path}");
+            return null;
+        }
+        
         try
         {
-            byte[] pngData = File.ReadAllBytes(path);
-            Texture2D tex = new Texture2D(2, 2);
+            var pngData = File.ReadAllBytes(path);
+            var tex = new Texture2D(2, 2);
             tex.LoadImage(pngData);
 
-            return Sprite.Create(
+            UnityEngine.Object.DontDestroyOnLoad(tex);
+            tex.hideFlags = HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+
+            var sprite = Sprite.Create(
                 tex,
                 new Rect(0, 0, tex.width, tex.height),
                 new Vector2(0.5f, 0.5f),
                 100f
             );
+            
+            // Just in case
+            UnityEngine.Object.DontDestroyOnLoad(sprite);
+            sprite.hideFlags = HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+            
+            return sprite;
         }
         catch (Exception e)
         {
@@ -54,12 +64,11 @@ internal class MedalImages
     {
         return medal switch
         {
-            Medal.Bronze => bronzeMedal,
-            Medal.Silver => silverMedal,
-            Medal.Gold => goldMedal,
-            Medal.Champion => championMedal,
-            _ => bronzeMedal
+            Medal.Bronze => _bronzeMedal,
+            Medal.Silver => _silverMedal,
+            Medal.Gold => _goldMedal,
+            Medal.Champion => _championMedal,
+            _ => _bronzeMedal
         };
     }
-
 }
