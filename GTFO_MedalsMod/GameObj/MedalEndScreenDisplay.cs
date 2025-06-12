@@ -32,18 +32,34 @@ public class MedalEndScreenDisplay
         // TODO
         var containerGO = new GameObject("MedalContainer");
         containerGO.transform.SetParent(pageSuccess.m_movingContentHolder);
-        containerGO.transform.localPosition = new Vector3(-380f, 365f, 0);
+        containerGO.transform.localPosition = new Vector3(-378f, 364f, 0);
         containerGO.transform.localScale = Vector3.one;
         var rectTrans = containerGO.AddComponent<RectTransform>();
         containerGO.layer = LayerManager.LAYER_UI;
         
         var sortingGroup = containerGO.AddComponent<SortingGroup>();
-        sortingGroup.sortingLayerName = "MenuSprite";
+        sortingGroup.sortingLayerName = "MenuPopupSprite";
         
-        var obj = Object.Instantiate(_prefab, containerGO.transform);
-        obj.SetActive(true);
-        var mask = obj.GetComponent<SpriteMask>();
-        CoroutineManager.StartCoroutine(Test(mask).WrapToIl2Cpp());
+        var bronze = CreateMedal(containerGO, Medal.Bronze);
+        var silver = CreateMedal(containerGO, Medal.Silver);
+        silver.transform.localPosition += Vector3.right * 200f;
+        var gold = CreateMedal(containerGO, Medal.Gold);
+        gold.transform.localPosition += Vector3.right * 400f;
+        var champion = CreateMedal(containerGO, Medal.Champion);
+        champion.transform.localPosition += Vector3.right * 600f;
+    }
+
+    private static GameObject CreateMedal(GameObject containerGO, Medal medal)
+    {
+        var holderGO = Object.Instantiate(_prefab, containerGO.transform);
+        holderGO.SetActive(true);
+        var mask = holderGO.GetComponent<SpriteMask>();
+        CoroutineManager.StartCoroutine(Test(mask).WrapToIl2Cpp()); // TODO: Remove
+        
+        var spriteRenderer = holderGO.GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer.sprite = MedalImages.GetSpriteFromMedal(medal);
+        
+        return holderGO;
     }
 
     // TODO: Remove this, just a POC
@@ -75,13 +91,12 @@ public class MedalEndScreenDisplay
 
     private static void CreatePrefab()
     {
-        
         var mainGO = new GameObject("MedalHolder");
         
         mainGO.AddComponent<RectTransform>();
         mainGO.transform.SetParent(null);
         mainGO.transform.localPosition = Vector3.zero;
-        mainGO.transform.localScale = Vector3.one * 14;
+        mainGO.transform.localScale = Vector3.one * 13.2f;
 
         var spriteMask = mainGO.AddComponent<SpriteMask>();
         spriteMask.sprite = MedalImages.Mask;
@@ -95,7 +110,9 @@ public class MedalEndScreenDisplay
         var spriteRenderer = spriteGO.AddComponent<SpriteRenderer>();
 
         spriteRenderer.sprite = MedalImages.GetSpriteFromMedal(Medal.Champion);
-        spriteRenderer.sortingLayerName = "MenuSprite";
+        spriteRenderer.sortingLayerName = "MenuPopupSprite";
+        spriteRenderer.sortingOrder = 100;
+        spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
         
         mainGO.SetActive(false);
         

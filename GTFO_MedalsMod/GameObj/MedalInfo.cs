@@ -153,7 +153,7 @@ internal partial class MedalInfo : MonoBehaviour
         spriteGO.AddComponent<RectTransform>();
         spriteGO.transform.SetParent(mainGO.transform);
         spriteGO.transform.localPosition = new Vector3(-40f, -10f, 0f);
-        spriteGO.transform.localScale = Vector3.one * 5;
+        spriteGO.transform.localScale = Vector3.one * 4.5f;
         var spriteRenderer = spriteGO.AddComponent<SpriteRenderer>();
         
         var medalInfoTextGO = Instantiate(shareText, mainGO.transform);
