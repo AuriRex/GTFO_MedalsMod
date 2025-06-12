@@ -7,6 +7,8 @@ namespace MedalsMod.GameObj;
 
 internal static class MedalImages
 {
+    public static Sprite Mask { get; private set; }
+    
     private static Sprite _championMedal;
     private static Sprite _goldMedal;
     private static Sprite _silverMedal;
@@ -20,6 +22,7 @@ internal static class MedalImages
         _goldMedal = LoadSingle(assemblyLocation + "/Resources/Gold.png");
         _silverMedal = LoadSingle(assemblyLocation + "/Resources/Silver.png");
         _bronzeMedal = LoadSingle(assemblyLocation + "/Resources/Bronze.png");
+        Mask = LoadSingle(assemblyLocation + "/Resources/mask_1024px.png");
     }
 
 
